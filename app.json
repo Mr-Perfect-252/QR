@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Lattice",
+    "slug": "lattice-qr",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#EDE9E1",
+    "android": {
+      "package": "com.lattice.qrstudio",
+      "adaptiveIcon": {
+        "backgroundColor": "#EDE9E1"
+      },
+      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+    }
+  }
+}
