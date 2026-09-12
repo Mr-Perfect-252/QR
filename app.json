@@ -6,6 +6,11 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "backgroundColor": "#EDE9E1",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFA500"
+    },
     "android": {
       "package": "com.lattice.qrstudio",
       "adaptiveIcon": {
