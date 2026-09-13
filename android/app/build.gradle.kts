@@ -6,22 +6,29 @@ plugins {
 android {
     namespace = "com.lattice.qr"
     compileSdk = 34
-    
+
     defaultConfig {
         applicationId = "com.lattice.qr"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
-        
-        // ApexHub SDK Configuration from .env
+
+        // ApexHub SDK Configuration (injected from environment / .env at build time).
+        // See .env.example for the full list of supported variables.
         buildConfigField("String", "APEXHUB_PUBLIC_KEY", "\"${System.getenv("APEXHUB_PUBLIC_KEY") ?: "pk_live_"}\"")
         buildConfigField("String", "APEXHUB_APP_ID", "\"${System.getenv("APEXHUB_APP_ID") ?: "app_"}\"")
         buildConfigField("String", "APEXHUB_CHANNEL", "\"${System.getenv("APEXHUB_CHANNEL") ?: "stable"}\"")
-        buildConfigField("int", "APEXHUB_CHECK_INTERVAL_HOURS", "${System.getenv("APEXHUB_CHECK_INTERVAL_HOURS") ?: "6"}")
+        // NOTE: ApexHubConfig.checkIntervalHours is a Long, so this field must be `long` (with an L suffix).
+        buildConfigField("long", "APEXHUB_CHECK_INTERVAL_HOURS", "${System.getenv("APEXHUB_CHECK_INTERVAL_HOURS") ?: "6"}L")
         buildConfigField("boolean", "APEXHUB_DEBUG", System.getenv("APEXHUB_DEBUG")?.toBoolean()?.toString() ?: "false")
     }
-    
+
+    buildFeatures {
+        // Required by AGP 8+ for buildConfigField(...) to generate BuildConfig.
+        buildConfig = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -31,16 +38,20 @@ android {
             )
         }
     }
-    
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
-    // ApexHub SDK
-    implementation("com.apexhub:sdk:1.0.0")
+    // ApexHub SDK — OTA updates, analytics & crash reporting (Maven Central).
+    implementation("io.github.mr-perfect-252:sdk:1.0.0")
     
     // Core Android
     implementation("androidx.appcompat:appcompat:1.6.1")

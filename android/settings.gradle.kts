@@ -4,6 +4,10 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    plugins {
+        id("com.android.application") version "8.4.0"
+        id("org.jetbrains.kotlin.android") version "1.9.24"
+    }
 }
 
 dependencyResolutionManagement {
@@ -11,18 +15,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        
-        // ApexHub SDK Repository
-        maven {
-            url = uri("https://maven.pkg.github.com/Mr-Perfect-252/apexhub-android-sdk")
-            credentials {
-                // Use GitHub token for authentication
-                // Set via: export GITHUB_ACTOR=your_username
-                //          export GITHUB_TOKEN=your_personal_access_token
-                username = (System.getenv("GITHUB_ACTOR") ?: "")
-                password = (System.getenv("GITHUB_TOKEN") ?: "")
-            }
-        }
+        // The ApexHub SDK (io.github.mr-perfect-252:sdk) is published to Maven
+        // Central, so no extra repository or credentials are required.
     }
 }
 

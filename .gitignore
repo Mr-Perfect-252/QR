@@ -14,3 +14,13 @@ web-build/
 .env
 .env.local
 *.log
+
+# Android / Gradle build artifacts
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+android/.cxx/
+*.apk
+*.aab
+local.properties

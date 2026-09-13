@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.apexhub.sdk.ApexHubConfig
 import com.apexhub.sdk.ApexHubUpdater
-import com.apexhub.sdk.ApkInstaller
 import kotlinx.coroutines.launch
 
 /**
@@ -54,13 +53,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        
-        // Resume pending installation if user granted permissions
-        try {
-            ApkInstaller.resumePendingInstall(this)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to resume pending install", e)
-        }
+
+        // The ApexHub SDK resumes any pending installation internally once the
+        // user returns from granting the "install unknown apps" permission, so
+        // no manual call is required here.
     }
 
     /**
