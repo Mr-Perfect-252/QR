@@ -3,6 +3,15 @@ plugins {
     id("kotlin-android")
 }
 
+// Read an environment variable, treating an unset OR blank value as "not
+// provided". This matters in CI: GitHub Actions sets `env:` from an undefined
+// secret to an EMPTY string (not null), so a plain `getenv(...) ?: default`
+// would inject "" and, for the numeric field, produce an invalid literal.
+fun envOr(name: String, default: String): String {
+    val v = System.getenv(name)
+    return if (v.isNullOrBlank()) default else v.trim()
+}
+
 android {
     namespace = "com.lattice.qr"
     compileSdk = 34
@@ -16,12 +25,12 @@ android {
 
         // ApexHub SDK Configuration (injected from environment / .env at build time).
         // See .env.example for the full list of supported variables.
-        buildConfigField("String", "APEXHUB_PUBLIC_KEY", "\"${System.getenv("APEXHUB_PUBLIC_KEY") ?: "pk_live_"}\"")
-        buildConfigField("String", "APEXHUB_APP_ID", "\"${System.getenv("APEXHUB_APP_ID") ?: "app_"}\"")
-        buildConfigField("String", "APEXHUB_CHANNEL", "\"${System.getenv("APEXHUB_CHANNEL") ?: "stable"}\"")
+        buildConfigField("String", "APEXHUB_PUBLIC_KEY", "\"${envOr("APEXHUB_PUBLIC_KEY", "pk_live_")}\"")
+        buildConfigField("String", "APEXHUB_APP_ID", "\"${envOr("APEXHUB_APP_ID", "app_")}\"")
+        buildConfigField("String", "APEXHUB_CHANNEL", "\"${envOr("APEXHUB_CHANNEL", "stable")}\"")
         // NOTE: ApexHubConfig.checkIntervalHours is a Long, so this field must be `long` (with an L suffix).
-        buildConfigField("long", "APEXHUB_CHECK_INTERVAL_HOURS", "${System.getenv("APEXHUB_CHECK_INTERVAL_HOURS") ?: "6"}L")
-        buildConfigField("boolean", "APEXHUB_DEBUG", System.getenv("APEXHUB_DEBUG")?.toBoolean()?.toString() ?: "false")
+        buildConfigField("long", "APEXHUB_CHECK_INTERVAL_HOURS", "${envOr("APEXHUB_CHECK_INTERVAL_HOURS", "6").toLong()}L")
+        buildConfigField("boolean", "APEXHUB_DEBUG", envOr("APEXHUB_DEBUG", "false").toBoolean().toString())
     }
 
     buildFeatures {
